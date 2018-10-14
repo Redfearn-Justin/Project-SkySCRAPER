@@ -1,0 +1,5 @@
+.gitattributes
+node_modules
+.env
+.vs
+thumb.db
