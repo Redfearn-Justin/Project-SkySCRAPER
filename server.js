@@ -1,10 +1,11 @@
 //Dependencies
 var express = require("express");
+var bodyParser = require("body-parser");
 var exphbs = require("express-handlebars");
+var mongoose = require("mongoose");
 ///========================================
 
 //Model Requirements
-var db = require("./models");
 var PORT = process.env.PORT || 3000;
 
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
@@ -15,8 +16,8 @@ var app = express();
 ///========================================
 
 //Parse request body as JSON
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 ///========================================
 
 //Setting up Handlebars
@@ -26,7 +27,7 @@ app.set("view engine", "handlebars");
 
 
 
-//Connecting to MongoDB
+//Connecting to MongoDB // latter isn't in instructions, consider taking out
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true} );
 ///========================================
 

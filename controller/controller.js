@@ -1,84 +1,101 @@
 //Dependencies
+//========================================
 var express = require("express");
 var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
-///========================================
 
 //Model Requirements
-var db = require("./models");
+//========================================
+var db = require("../models");
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
-///========================================
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoAssignment";
+
 
 //Connecting to MongoDB
+//=========================================
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true} );
-///========================================
 
 //Initializing Express
-var app = express();
+//========================================
+var router = express.Router();
 
 
 
 //Routes
+//========================================
 
-// A GET route for scraping the echoJS website
-app.get("/scrape", function(req, res) {
-    // First, we grab the body of the html with axios
-    axios.get("http://www.echojs.com/").then(function(response) {
-      // Then, we load that into cheerio and save it to $ for a shorthand selector
+// A GET route for scraping website
+router.post("/scrape", function(req, res) {
+
+    axios.get("https://www.gamespot.com/news/").then(function(response) {
+ 
       var $ = cheerio.load(response.data);
   
-      // Now, we grab every h2 within an article tag, and do the following:
-      $("article h2").each(function(i, element) {
-        // Save an empty result object
+      $("article.media.media-article").each(function(i, element) {
+
         var result = {};
   
         // Add the text and href of every link, and save them as properties of the result object
-        result.title = $(this)
-          .children("a")
-          .text();
-        result.link = $(this)
-          .children("a")
-          .attr("href");
+        result.title = $(this).find("h3").text();
+
+        result.summary = $(this).find("p").text();
+
+        result.link = $(this).find("a").attr("href");
   
         // Create a new Article using the `result` object built from scraping
         db.Article.create(result)
-          .then(function(dbArticle) {
+        .then(function(dbArticle) {
             // View the added result in the console
             console.log(dbArticle);
-          })
-          .catch(function(err) {
+        })
+        .catch(function(err) {
             // If an error occurred, send it to the client
             return res.json(err);
-          });
+        });
+
+        //then post the articles to the page
+        db.Article.find({})
+        .then(function(dbArticle) {
+        
+            res.json(dbArticle);
+        
+        })
+        .catch(function(err){
+        
+          console.log(err.message);
+        
+          res.json(err);
+        });
       });
   
       // If we were able to successfully scrape and save an Article, send a message to the client
-      res.send("Scrape Complete");
+      res.send("Scrape Complete & post complete");
     });
   });
   
   // Route for getting all Articles from the db
-  app.get("/articles", function(req, res) {
+  // app.get("/", function(req, res) {
     
-    db.Article.find({})
-    .then(function(dbArticle) {
+  //   db.Article.find({})
+  //   .then(function(dbArticle) {
   
-      res.json(dbArticle);
+  //     res.json(dbArticle);
   
-    })
-    .catch(function(err){
+  //   })
+  //   .catch(function(err){
   
-      console.log(err.message);
+  //     console.log(err.message);
   
-      res.json(err);
-    });
-    // TODO: Finish the route so it grabs all of the articles
-  });
+  //     res.json(err);
+  //   });
+  //   //TO DO NOT VALID
+  //   // TODO: Finish the route so it grabs all of the articles
+  // });
   
   // Route for grabbing a specific Article by id, populate it with it's note
-  app.get("/articles/:id", function(req, res) {
+  router.get("/articles/:id", function(req, res) {
+    //TO DO NOT VALID
     // TODO
     // ====
     // Finish the route so it finds one article using the req.params.id,
@@ -104,7 +121,8 @@ app.get("/scrape", function(req, res) {
   });
   
   // Route for saving/updating an Article's associated Note
-  app.post("/articles/:id", function(req, res) {
+  router.post("/articles/:id", function(req, res) {
+    //TO DO NOT VALID
     // TODO
     // ====
     // save the new note that gets posted to the Notes collection
