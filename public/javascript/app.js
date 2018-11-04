@@ -1,11 +1,12 @@
-// // Grab the articles as a json
-// $.getJSON("/articles", function (data) {
-//   // For each one
-//   for (var i = 0; i < data.length; i++) {
-//     // Display the apropos information on the page
-//     $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-//   }
-// });
+// Grab the articles as a json
+$.getJSON("/articles", function (data) {
+  // For each one
+  for (var i = 0; i < data.length; i++) {
+    // Display the apropos information on the page
+    $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+    $("#articles").append("<button id='saveArticle'>");
+  }
+});
 
 
 // Whenever someone clicks a p tag
@@ -71,17 +72,17 @@ $(document).on("click", "#savenote", function () {
   $("#bodyinput").val("");
 });
 
-$("#initiateScrape").on("click", function(event) {
-  event.preventDefault();
+// $("#initiateScrape").on("click", function(event) {
+//   event.preventDefault();
 
-  $.ajax("/scrape", {
-    type: "GET"
+//   $.ajax("/scrape", {
+//     type: "GET"
 
-  }).then(function(response_data) {
+//   }).then(function(response_data) {
 
-    console.log(response_data);
+//     console.log(response_data);
 
-    window.location.reload();
-  }
-  );
-});
+//     window.location.reload();
+//   }
+//   );
+// });
