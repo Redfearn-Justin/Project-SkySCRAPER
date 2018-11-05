@@ -32,7 +32,7 @@ mongoose.connect(MONGODB_URI);
 // A GET route for scraping website
 app.get("/scrape", function (req, res) {
 
-    axios.get("https://www.gamespot.com/news/").then(function (response) {
+    axios.get("https://www.gamespot.com/news/").then( (response) => {
 
         var $ = cheerio.load(response.data);
 
@@ -41,11 +41,11 @@ app.get("/scrape", function (req, res) {
             var result = {};
 
             // Add the text and href of every link, and save them as properties of the result object
-            result.title = $(element).find("h3").text();
+            result.title = $(this).find("h3").text();
 
-            result.summary = $(element).find("p").text();
+            result.summary = $(this).find("p").text().trim();
 
-            result.link = $(element).find("a").attr("href");
+            result.link = $(this).find("a").attr("href");
 
             console.log(result);
 
@@ -59,20 +59,6 @@ app.get("/scrape", function (req, res) {
                     // If an error occurred, send it to the client
                     return res.json(err);
                 });
-
-            // //then post the articles to the page
-            // db.Article.find({})
-            //     .then(function (dbArticle) {
-
-            //         res.json(dbArticle);
-
-            //     })
-            //     .catch(function (err) {
-
-            //         console.log(err.message);
-
-            //         res.json(err);
-            //     });
         });
 
         // If we were able to successfully scrape and save an Article, send a message to the client

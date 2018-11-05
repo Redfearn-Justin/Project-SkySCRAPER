@@ -3,8 +3,8 @@ $.getJSON("/articles", function (data) {
   // For each one
   for (var i = 0; i < data.length; i++) {
     // Display the apropos information on the page
-    $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-    $("#articles").append("<button id='saveArticle'>");
+    $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].summary + "<br />" + data[i].link + "</p>");
+    $("#articles").append("<button id='saveArticle'>" + 'Save' + "</button>");
   }
 });
 
@@ -72,17 +72,21 @@ $(document).on("click", "#savenote", function () {
   $("#bodyinput").val("");
 });
 
-// $("#initiateScrape").on("click", function(event) {
-//   event.preventDefault();
+$(document).on("click", "#startscrape", function() {
 
-//   $.ajax("/scrape", {
-//     type: "GET"
+  console.log("button pressed");
 
-//   }).then(function(response_data) {
+  $.ajax("/scrape", {
+    type: "GET",
+    url: "/scrape"
+  }).then(function(response_data) {
 
-//     console.log(response_data);
+    console.log(response_data);
 
-//     window.location.reload();
-//   }
-//   );
-// });
+    window.location.reload();
+
+    location.reload();
+
+  }
+  );
+});
